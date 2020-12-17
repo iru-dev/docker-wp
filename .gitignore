@@ -1,0 +1,5 @@
+########
+mysql/db/*
+nginx/log/*
+nginx/www/*
+nginx/ssl/*

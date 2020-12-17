@@ -1,0 +1,40 @@
+version: '3.3'
+services:
+    nginx:
+#        build: ./nginx
+        image: nginx:latest
+        container_name: nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./nginx/ssl:/etc/nginx/ssl/
+            - ./nginx/log:/var/log/nginx/
+            - ./nginx/conf.d:/etc/nginx/conf.d/
+            - ./nginx/www:/var/www
+        links:
+            - php
+
+    mysql:
+        image: mysql:latest
+        ports:
+            - "3306:3306"
+        container_name: mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=root_passwd
+            - MYSQL_DATABASE=wp
+            - MYSQL_USER=wp
+            - MYSQL_PASSWORD=wp_passwd
+        volumes:
+            - ./mysql/db:/var/lib/mysql
+
+    php:
+        build: ./php
+
+        container_name: php-fpm
+
+        volumes:
+            - ./nginx/www:/var/www
+
+        links:
+            - mysql
